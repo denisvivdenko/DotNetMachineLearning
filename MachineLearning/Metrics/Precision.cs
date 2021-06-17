@@ -43,22 +43,61 @@ namespace DotNetML.Metrics
 				throw new Exception("different dimentions");
 			}
 
-			double truePositive = 0;
-			double falsePositive = 0;
+			int[,] crosstab = FillCrosstab(actual, expected, _allClasses);
 
-			for (int index = 0; index < expected.Length; index++)
+
+			int classesNumber = _allClasses.Length;
+			double[] precisions = new double[classesNumber];
+
+			for (int column = 0; column < classesNumber; column++)
 			{
-				if (expected[index] == actual[index])
+				double truePositiveAnswers = 0;
+				double falsePositiveAnswers = 0;
+
+				for (int row = 0; row < classesNumber; row++)
 				{
-					truePositive += 1;
+					if (column == row)
+					{
+						truePositiveAnswers = crosstab[row, column];
+					}
+					else
+					{
+						falsePositiveAnswers += crosstab[row, column];
+					}
+				}
+
+				double precision = truePositiveAnswers / (truePositiveAnswers + falsePositiveAnswers);
+				precisions[column] = precision;
+			}
+
+			double averagePrecision = precisions.Average();
+			return averagePrecision;
+		}
+
+		
+		private int[,] FillCrosstab(int[] actual, int[] expected, int[] classes)
+		{
+			int answersNumber = actual.Length;
+			int classesNumber = classes.Length;
+			int[,] crosstab = new int[classesNumber, classesNumber];
+
+			for (int answerId = 0; answerId < answersNumber; answerId++)
+			{
+				if (actual[answerId] == expected[answerId])
+				{
+					int classIdentifier = actual[answerId];
+					crosstab[classIdentifier, classIdentifier] += 1;
 				}
 				else
 				{
-					falsePositive += 1;
+					int expectedClassIdentifier = expected[answerId];
+					int actualClassIdentifier = actual[answerId];
+
+					crosstab[actualClassIdentifier, expectedClassIdentifier] += 1;
 				}
 			}
 
-			return (truePositive) / (falsePositive + truePositive);
+			return crosstab;
 		}
 	}
 }
