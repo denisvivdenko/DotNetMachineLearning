@@ -31,30 +31,30 @@ namespace DotNetML.Metrics
 			return allClasses.ToArray<int>();
 		}
 
-		protected int[,] FillCrosstab(int[] actual, int[] expected, int[] classes)
+		protected int[,] FillConfusionMatrix(int[] actual, int[] expected, int[] classes)
 		{
 			Dictionary<int, int> classesEnum = CreateClassesEnum(classes);
 			int answersNumber = actual.Length;
 			int classesNumber = classes.Length;
-			int[,] crosstab = new int[classesNumber, classesNumber];
+			int[,] confusionMatrix = new int[classesNumber, classesNumber];
 
 			for (int answerId = 0; answerId < answersNumber; answerId++)
 			{
 				if (actual[answerId] == expected[answerId])
 				{
 					int classIdentifier = classesEnum[actual[answerId]];
-					crosstab[classIdentifier, classIdentifier] += 1;
+					confusionMatrix[classIdentifier, classIdentifier] += 1;
 				}
 				else
 				{
 					int expectedClassIdentifier = classesEnum[expected[answerId]];
 					int actualClassIdentifier = classesEnum[actual[answerId]];
 
-					crosstab[actualClassIdentifier, expectedClassIdentifier] += 1;
+					confusionMatrix[actualClassIdentifier, expectedClassIdentifier] += 1;
 				}
 			}
 
-			return crosstab;
+			return confusionMatrix;
 		}
 	}
 }

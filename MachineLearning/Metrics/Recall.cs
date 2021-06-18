@@ -32,7 +32,7 @@ namespace DotNetML.Metrics
 				throw new Exception("different dimentions");
 			}
 
-			int[,] crosstab = FillCrosstab(actual, expected, _classes);
+			int[,] crosstab = FillConfusionMatrix(actual, expected, _classes);
 
 
 			int classesNumber = _classes.Length;
