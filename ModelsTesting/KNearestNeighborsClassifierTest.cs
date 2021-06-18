@@ -4,8 +4,9 @@ using System.Linq;
 using Accord.DataSets;
 using DotNetML.KNearestNeighbors;
 using DotNetML.Metrics;
+using DotNetML.ModelSelection;
 
-namespace MLAlgorithms
+namespace MLAlgorithmsTests
 {
 	class KNearestNeighborsClassifierTest
 	{
@@ -14,55 +15,22 @@ namespace MLAlgorithms
 			for (int i = 0; i < 20; i++)
 			{
 				var iris = new Iris();
-				double[][] inputs = iris.Instances;
+				double[][] data = iris.Instances;
 				int[] labels = iris.ClassLabels;
 
-				int testSampleSize = 20;
-
-				HashSet<int> testIndices = new HashSet<int>();
-				while (testIndices.Count < testSampleSize)
-				{
-					Random random = new Random();
-					int number = random.Next(0, labels.Length);
-					testIndices.Add(number);
-				}
-
-				double[][] X_train = inputs;
-				double[][] X_test = new double[testSampleSize][];
-				int[] y_train = labels;
-				int[] y_test = new int[testSampleSize];
-
-				int lastIndex = 0;
-				foreach (int index in testIndices)
-				{
-					X_test[lastIndex] = X_train[index];
-					y_test[lastIndex] = y_train[index];
-
-					lastIndex++;
-				}
-
-
-				foreach (int index in testIndices.OrderByDescending(v => v))
-				{
-					List<double[]> X_train_ = new List<double[]>(X_train);
-					List<int> y_train_ = new List<int>(y_train);
-					X_train_.RemoveAt(index);
-					y_train_.RemoveAt(index);
-
-					X_train = X_train_.ToArray();
-					y_train = y_train_.ToArray();
-				}
-
+				TrainTestSelector trainTestSelector = new TrainTestSelector(0.3);
+				var ((XTrain, XTest), (yTrain, yTest)) = trainTestSelector.SplitData(data, labels);
 
 				var clf = new KNearestNeighborsClassifier(3);
-				clf.TrainModel(X_train, y_train);
-				int[] predictions = clf.PredictLabels(X_test);
+				clf.TrainModel(XTrain, yTrain);
+				int[] predictions = clf.PredictLabels(XTest);
 
-				Precision precisionMetric = new Precision(y_test, predictions);
-				Recall recallMetric = new Recall(y_test, predictions);
-				F1Score f1Score = new F1Score(y_test, predictions);
+				Precision precisionMetric = new Precision(yTest, predictions);
+				Recall recallMetric = new Recall(yTest, predictions);
+				F1Score f1Score = new F1Score(yTest, predictions);
 
-				Console.WriteLine($"PRECISION: {precisionMetric.GetResult()}\tRECALL: {recallMetric.GetResult()}\tF1: {f1Score.GetResult()}");
+				Console.WriteLine(String.Format("PRECISION: {0:F3}  RECALL: {0:F3}  F1: {0:F3}", 
+					precisionMetric.GetResult(), recallMetric.GetResult(), f1Score.GetResult()));
 			}
 		}
 
@@ -71,24 +39,24 @@ namespace MLAlgorithms
 
 /**
 OUTPUT:
-PRECISION: 0,9666666666666667   RECALL: 0,9444444444444445
-PRECISION: 1    RECALL: 1
-PRECISION: 1    RECALL: 1
-PRECISION: 1    RECALL: 1
-PRECISION: 1    RECALL: 1
-PRECISION: 0,9523809523809524   RECALL: 0,9666666666666667
-PRECISION: 0,875        RECALL: 0,8783068783068783
-PRECISION: 1    RECALL: 1
-PRECISION: 0,9444444444444445   RECALL: 0,9333333333333332
-PRECISION: 1    RECALL: 1
-PRECISION: 0,9583333333333334   RECALL: 0,9444444444444445
-PRECISION: 1    RECALL: 1
-PRECISION: 1    RECALL: 1
-PRECISION: 0,9583333333333334   RECALL: 0,9583333333333334
-PRECISION: 0,9166666666666666   RECALL: 0,9583333333333334
-PRECISION: 1    RECALL: 1
-PRECISION: 1    RECALL: 1
-PRECISION: 1    RECALL: 1
-PRECISION: 0,9047619047619048   RECALL: 0,9047619047619048
-PRECISION: 0,9444444444444445   RECALL: 0,9523809523809524
+PRECISION: 0,982  RECALL: 0,982  F1: 0,982
+PRECISION: 1,000  RECALL: 1,000  F1: 1,000
+PRECISION: 0,978  RECALL: 0,978  F1: 0,978
+PRECISION: 0,952  RECALL: 0,952  F1: 0,952
+PRECISION: 0,929  RECALL: 0,929  F1: 0,929
+PRECISION: 0,906  RECALL: 0,906  F1: 0,906
+PRECISION: 0,952  RECALL: 0,952  F1: 0,952
+PRECISION: 0,980  RECALL: 0,980  F1: 0,980
+PRECISION: 0,937  RECALL: 0,937  F1: 0,937
+PRECISION: 1,000  RECALL: 1,000  F1: 1,000
+PRECISION: 1,000  RECALL: 1,000  F1: 1,000
+PRECISION: 0,924  RECALL: 0,924  F1: 0,924
+PRECISION: 0,978  RECALL: 0,978  F1: 0,978
+PRECISION: 0,941  RECALL: 0,941  F1: 0,941
+PRECISION: 1,000  RECALL: 1,000  F1: 1,000
+PRECISION: 0,983  RECALL: 0,983  F1: 0,983
+PRECISION: 0,944  RECALL: 0,944  F1: 0,944
+PRECISION: 0,955  RECALL: 0,955  F1: 0,955
+PRECISION: 0,939  RECALL: 0,939  F1: 0,939
+PRECISION: 0,979  RECALL: 0,979  F1: 0,979
 **/

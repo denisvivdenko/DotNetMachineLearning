@@ -9,7 +9,7 @@ namespace DotNetML.Metrics
 		private double _f1Score;
 
 
-		public F1Score(int[] expected, int[] actual)
+		public F1Score(int[] expected, int[] actual) //	multiclass score
 		{
 			_f1Score = CalculateF1Score(expected, actual);
 		}

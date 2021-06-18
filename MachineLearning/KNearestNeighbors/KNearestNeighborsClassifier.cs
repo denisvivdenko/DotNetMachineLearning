@@ -11,7 +11,7 @@ namespace DotNetML.KNearestNeighbors
 		private int _kcoefficient;
 		private double[][] _data;
 		private int[] _labels;
-		private bool isTrained = false;
+		private bool _isTrained = false;
 
 
 		public KNearestNeighborsClassifier(int kcoefficient)
@@ -23,7 +23,7 @@ namespace DotNetML.KNearestNeighbors
 		{
 			_data = data;
 			_labels = labels;
-			isTrained = true;
+			_isTrained = true;
 		}
 
 		public int PredictLabel(double[] input)
@@ -134,7 +134,7 @@ namespace DotNetML.KNearestNeighbors
 
 		private void CheckIsTrained()
 		{
-			if (!isTrained)
+			if (!_isTrained)
 			{
 				throw new Exception("the model wasn't trained");
 			}

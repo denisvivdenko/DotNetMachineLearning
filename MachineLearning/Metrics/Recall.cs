@@ -11,7 +11,7 @@ namespace DotNetML.Metrics
 		private int[] _classes;
 
 
-		public Recall(int[] expected, int[] actual)
+		public Recall(int[] expected, int[] actual) //	multiclass score
 		{
 			_classes = ExtractClasses(expected, actual);
 			_recall = CalculateRecall(expected, actual);

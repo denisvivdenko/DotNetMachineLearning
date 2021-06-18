@@ -11,7 +11,7 @@ namespace DotNetML.Metrics
 		private int[] _classes;
 
 
-		public Precision(int[] expected, int[] actual)
+		public Precision(int[] expected, int[] actual)	// multiclass score
 		{
 			_classes = ExtractClasses(expected, actual);
 			_precision = CalculatePrecision(expected, actual);
