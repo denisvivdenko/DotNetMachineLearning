@@ -1,55 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-/**
+
 namespace DotNetML.Metrics
 {
-	public class Recall : IMetric
+	public class Recall : CategoricalMetric, IMetric
 	{
-		private double _precision;
+		private double _recall;
 		private int[] _classes;
-		private Dictionary<int, int> _classesEnum;
 
 
-		public Precision(int[] expected, int[] actual)
+		public Recall(int[] expected, int[] actual)
 		{
 			_classes = ExtractClasses(expected, actual);
-			_classesEnum = CreateClassesEnum(_classes);
-			_precision = CalculatePrecision(expected, actual);
+			_recall = CalculateRecall(expected, actual);
 		}
 
 
 		public double GetResult()
 		{
-			return _precision;
+			return _recall;
 		}
 
 
-		private Dictionary<int, int> CreateClassesEnum(int[] classes)
-		{
-			Dictionary<int, int> classesEnum = new Dictionary<int, int>();
-
-			for (int classIndex = 0; classIndex < classes.Length; classIndex++)
-			{
-				int encodedClass = classes[classIndex];
-				classesEnum[encodedClass] = classIndex;
-			}
-
-			return classesEnum;
-		}
-
-		private int[] ExtractClasses(int[] expected, int[] actual)
-		{
-			HashSet<int> expectedClasses = new HashSet<int>(expected);
-			HashSet<int> actualClasses = new HashSet<int>(actual);
-
-			HashSet<int> allClasses = new HashSet<int>(expectedClasses.Union(actualClasses));
-
-			return allClasses.ToArray<int>();
-		}
-
-
-		private double CalculatePrecision(int[] expected, int[] actual)
+		private double CalculateRecall(int[] expected, int[] actual)
 		{
 
 			if (expected.Length != actual.Length)
@@ -61,14 +36,15 @@ namespace DotNetML.Metrics
 
 
 			int classesNumber = _classes.Length;
-			double[] precisions = new double[classesNumber];
+			double[] recalls = new double[classesNumber];
 
-			for (int column = 0; column < classesNumber; column++)
+			int recordIndex = 0;
+			for (int row = 0; row < classesNumber; row++)
 			{
 				double truePositiveAnswers = 0;
-				double falsePositiveAnswers = 0;
+				double falseNegativeAnswers = 0;
 
-				for (int row = 0; row < classesNumber; row++)
+				for (int column = 0; column < classesNumber; column++)
 				{
 					if (column == row)
 					{
@@ -76,43 +52,17 @@ namespace DotNetML.Metrics
 					}
 					else
 					{
-						falsePositiveAnswers += crosstab[row, column];
+						falseNegativeAnswers += crosstab[row, column];
 					}
 				}
 
-				double precision = truePositiveAnswers / (truePositiveAnswers + falsePositiveAnswers);
-				precisions[column] = precision;
+				double recall = truePositiveAnswers / (truePositiveAnswers + falseNegativeAnswers);
+				recalls[recordIndex] = recall;
+				recordIndex++;
 			}
 
-			double averagePrecision = precisions.Average();
-			return averagePrecision;
-		}
-
-
-		private int[,] FillCrosstab(int[] actual, int[] expected, int[] classes)
-		{
-			int answersNumber = actual.Length;
-			int classesNumber = classes.Length;
-			int[,] crosstab = new int[classesNumber, classesNumber];
-
-			for (int answerId = 0; answerId < answersNumber; answerId++)
-			{
-				if (actual[answerId] == expected[answerId])
-				{
-					int classIdentifier = _classesEnum[actual[answerId]];
-					crosstab[classIdentifier, classIdentifier] += 1;
-				}
-				else
-				{
-					int expectedClassIdentifier = _classesEnum[expected[answerId]];
-					int actualClassIdentifier = _classesEnum[actual[answerId]];
-
-					crosstab[actualClassIdentifier, expectedClassIdentifier] += 1;
-				}
-			}
-
-			return crosstab;
+			double averageRecall = recalls.Average();
+			return averageRecall;
 		}
 	}
 }
-**/

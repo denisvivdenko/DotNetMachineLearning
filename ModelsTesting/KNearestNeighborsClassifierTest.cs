@@ -11,7 +11,7 @@ namespace MLAlgorithms
 	{
 		static void Main(string[] args)
 		{
-			for (int i = 0; i < 40; i++)
+			for (int i = 0; i < 20; i++)
 			{
 				var iris = new Iris();
 				double[][] inputs = iris.Instances;
@@ -58,9 +58,10 @@ namespace MLAlgorithms
 				clf.TrainModel(X_train, y_train);
 				int[] predictions = clf.PredictLabels(X_test);
 
-				Precision metric = new Precision(y_test, predictions);
+				Precision precisionMetric = new Precision(y_test, predictions);
+				Recall recallMetric = new Recall(y_test, predictions);
 
-				Console.WriteLine(metric.GetResult());
+				Console.WriteLine($"PRECISION: {precisionMetric.GetResult()}\tRECALL: {recallMetric.GetResult()}");
 			}
 		}
 

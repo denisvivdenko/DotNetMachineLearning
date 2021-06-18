@@ -38,6 +38,7 @@ namespace DotNetML.Metrics
 			int classesNumber = _classes.Length;
 			double[] precisions = new double[classesNumber];
 
+			int recordIndex = 0;
 			for (int column = 0; column < classesNumber; column++)
 			{
 				double truePositiveAnswers = 0;
@@ -56,7 +57,8 @@ namespace DotNetML.Metrics
 				}
 
 				double precision = truePositiveAnswers / (truePositiveAnswers + falsePositiveAnswers);
-				precisions[column] = precision;
+				precisions[recordIndex] = precision;
+				recordIndex++;
 			}
 
 			double averagePrecision = precisions.Average();
