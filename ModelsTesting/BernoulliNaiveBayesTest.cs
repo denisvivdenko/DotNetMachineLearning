@@ -17,7 +17,7 @@ namespace ModelsTesting
 
             var classifier = new BernoulliNaiveBayesClassifier();
             classifier.TrainModel(data, target);
-
+            classifier.PrintInfo();
 
 
             Console.WriteLine();
