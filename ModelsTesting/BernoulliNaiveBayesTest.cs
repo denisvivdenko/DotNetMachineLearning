@@ -19,6 +19,10 @@ namespace ModelsTesting
             classifier.TrainModel(data, target);
             classifier.PrintInfo();
 
+            Console.WriteLine("+++");
+
+            Console.WriteLine($"{classifier.PredictPostitiveOutcomeProbability(data[0]) > 0.5}");
+
 
             Console.WriteLine();
         }

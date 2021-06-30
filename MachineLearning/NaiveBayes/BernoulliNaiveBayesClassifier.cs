@@ -29,11 +29,32 @@ namespace DotNetML.NaiveBayes
 		}
 
 
-		public int PredictLabel(int[] data)
+		public double PredictPostitiveOutcomeProbability(int[] data)
 		{
-			
+			double logProbabilityPositive = 0.0;
+			double logProbabilityNegative = 0.0;
 
-			return 0;
+			foreach (KeyValuePair<int, double[]> attributeProbabilities in _attributesProbabilities)
+			{
+				int attributeIndex = attributeProbabilities.Key;
+				double[] probabilities = attributeProbabilities.Value;
+
+				if (data[attributeIndex] == 1)
+				{
+					logProbabilityNegative += Math.Log(probabilities[0]);
+					logProbabilityPositive += Math.Log(probabilities[1]);
+				}
+				else
+				{
+					logProbabilityNegative += Math.Log(1 - probabilities[0]);
+					logProbabilityPositive += Math.Log(1 - probabilities[1]);
+				}
+			}
+
+			logProbabilityNegative = Math.Exp(logProbabilityNegative);
+			logProbabilityPositive = Math.Exp(logProbabilityPositive);
+
+			return logProbabilityPositive / (logProbabilityPositive + logProbabilityNegative);
 		}
 
 
