@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using DotNetML.NaiveBayes;
+using DotNetML.Metrics;
 
 namespace ModelsTesting
 {
@@ -20,8 +21,16 @@ namespace ModelsTesting
             classifier.PrintInfo();
 
             Console.WriteLine("+++");
+            int[] predictions = classifier.PredictLabels(data);
 
-            Console.WriteLine($"{classifier.PredictPostitiveOutcomeProbability(data[0]) > 0.5}");
+            for (int i = 0; i < target.Length; i++)
+			{   
+                Console.WriteLine($"id:{i}\t{predictions[i]}\t {target[i]}");
+			}
+
+            Console.WriteLine($"Precision: {new Precision(target, predictions).GetResult()}");
+            Console.WriteLine($"Recall: {new Recall(target, predictions).GetResult()}");
+            Console.WriteLine($"F1: {new F1Score(target, predictions).GetResult()}");
 
 
             Console.WriteLine();

@@ -15,9 +15,13 @@ namespace DotNetML.NaiveBayes
 		private Dictionary<int, double> _labelsProbability;
 		private double _alpha = 2;
 		private double _kSmothingCoefficient = 0.5;
+		private double _probabilityThreshold;
 
 
-		public BernoulliNaiveBayesClassifier() { }
+		public BernoulliNaiveBayesClassifier(double probabilityThreshold = 0.5)
+		{
+			_probabilityThreshold = probabilityThreshold;
+		}
 	
 
 		public void TrainModel(int[][] data, int[] labels)
@@ -29,7 +33,46 @@ namespace DotNetML.NaiveBayes
 		}
 
 
-		public double PredictPostitiveOutcomeProbability(int[] data)
+		public int[] PredictLabels(int[][] data)
+		{
+			int[] result = new int[data.GetLength(0)];
+
+			for (int index = 0; index < data.GetLength(0); index++)
+			{
+				double prediction = PredictPostitiveOutcomeProbability(data[index]);
+
+				if (prediction > _probabilityThreshold)
+				{
+					result[index] = 1;
+				}
+				else
+				{
+					result[index] = 0;
+				}
+			}
+
+			return result;
+		}
+
+
+		public void PrintInfo()
+		{
+			if (_isTrained == false)
+			{
+				throw new Exception("PrintInfo(). Model is not trained yet");
+			}
+
+			foreach (double[] featureProbability in _attributesProbabilities.Values)
+			{
+				Console.WriteLine(featureProbability[0].ToString() + "\t" + featureProbability[1].ToString());
+			}
+			Console.WriteLine("\nLabels probability\n======");
+
+			Console.WriteLine(_labelsProbability[0].ToString() + "\t" + _labelsProbability[1].ToString());
+		}
+
+
+		private int PredictPostitiveOutcomeProbability(int[] data)
 		{
 			double logProbabilityPositive = 0.0;
 			double logProbabilityNegative = 0.0;
@@ -54,30 +97,13 @@ namespace DotNetML.NaiveBayes
 			logProbabilityNegative = Math.Exp(logProbabilityNegative);
 			logProbabilityPositive = Math.Exp(logProbabilityPositive);
 
-			return logProbabilityPositive / (logProbabilityPositive + logProbabilityNegative);
-		}
-
-
-		public int[] PredictLabels(int[][] data)
-		{
-			return null;
-		}
-
-
-		public void PrintInfo()
-		{
-			if (_isTrained == false)
+			double probability = logProbabilityPositive / (logProbabilityPositive + logProbabilityNegative);
+			if (probability > _probabilityThreshold)
 			{
-				throw new Exception("PrintInfo(). Model is not trained yet");
+				return 1;
 			}
 
-			foreach (double[] featureProbability in _attributesProbabilities.Values)
-			{
-				Console.WriteLine(featureProbability[0].ToString() + "\t" + featureProbability[1].ToString());
-			}
-			Console.WriteLine("\nLabels probability\n======");
-
-			Console.WriteLine(_labelsProbability[0].ToString() + "\t" + _labelsProbability[1].ToString());
+			return 0;
 		}
 
 
