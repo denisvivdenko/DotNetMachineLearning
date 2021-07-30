@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DotNetML.Metrics
 {
-	public class F1Score : IMetric
+	public class F1Score : Metric
 	{
 		private double _f1Score;
 
@@ -15,7 +15,7 @@ namespace DotNetML.Metrics
 		}
 
 
-		public double GetResult()
+		public override double GetResult()
 		{
 			return _f1Score;
 		}

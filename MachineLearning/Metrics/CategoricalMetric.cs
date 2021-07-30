@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DotNetML.Metrics
 {
-	public abstract class CategoricalMetric
+	public abstract class CategoricalMetric : Metric
 	{
 
-		protected Dictionary<int, int> CreateClassesEnum(int[] classes)
+        protected Dictionary<int, int> CreateClassesEnum(int[] classes)
 		{
 			Dictionary<int, int> classesEnum = new Dictionary<int, int>();
 

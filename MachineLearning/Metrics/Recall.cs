@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DotNetML.Metrics
 {
-	public class Recall : CategoricalMetric, IMetric
+	public class Recall : CategoricalMetric
 	{
 		private double _recall;
 		private int[] _classes;
@@ -18,11 +16,10 @@ namespace DotNetML.Metrics
 		}
 
 
-		public double GetResult()
+		public override double GetResult()
 		{
 			return _recall;
 		}
-
 
 		private double CalculateRecall(int[] expected, int[] actual)
 		{

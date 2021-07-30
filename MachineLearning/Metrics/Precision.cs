@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DotNetML.Metrics
 {
-	public class Precision : CategoricalMetric, IMetric
+	public class Precision : CategoricalMetric
 	{
 		private double _precision;
 		private int[] _classes;
@@ -18,7 +18,7 @@ namespace DotNetML.Metrics
 		}
 
 
-		public double GetResult()
+		public override double GetResult()
 		{
 			return _precision;
 		}
