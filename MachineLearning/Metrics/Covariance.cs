@@ -15,10 +15,12 @@ namespace DotNetML.Metrics
             _covariance = CalculateCovariance(firstSet, secondSet);
         }
 
+
         public override double GetResult() 
         {
             return _covariance;
         }
+
 
         private double CalculateCovariance(double[] firstSet, double[] secondSet)
         {

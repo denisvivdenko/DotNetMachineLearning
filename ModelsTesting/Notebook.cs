@@ -8,7 +8,7 @@ namespace ModelsTesting
 	{
 		public static void Main(string[] args)
 		{
-			new BernoulliNaiveBayesTest();
+			new LinearRegressionTest();
 		}
 	}
 }

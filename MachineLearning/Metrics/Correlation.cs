@@ -14,10 +14,12 @@ namespace DotNetML.Metrics
             _correlation = CalculateCorrelation(firstSet, secondSet);
         }
 
+
         public override double GetResult() 
         {
             return Math.Round(_correlation, 3, MidpointRounding.ToEven);
         }
+
 
         private double CalculateCorrelation(double[] firstSet, double[] secondSet)
         {

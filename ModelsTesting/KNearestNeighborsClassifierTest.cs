@@ -6,7 +6,7 @@ using DotNetML.KNearestNeighbors;
 using DotNetML.Metrics;
 using DotNetML.ModelSelection;
 
-namespace MLAlgorithmsTests
+namespace ModelsTesting
 {
 	public class KNearestNeighborsClassifierTest
 	{
@@ -18,7 +18,10 @@ namespace MLAlgorithmsTests
 
 
 			TrainTestSelector trainTestSelector = new TrainTestSelector(0.3);
-			var ((XTrain, XTest), (yTrain, yTest)) = trainTestSelector.SplitData(data, labels);
+			var ((XTrain, XTest), (yTrainDouble, yTestDouble)) = trainTestSelector.SplitData(data, ConvertIntArrayToDoubleArray(labels));
+
+			int[] yTrain = ConvertDoubleArrayToIntArray(yTrainDouble);
+			int[] yTest = ConvertDoubleArrayToIntArray(yTestDouble);
 
 			var clf = new KNearestNeighborsClassifier(3);
 			clf.TrainModel(XTrain, yTrain);	
@@ -33,6 +36,17 @@ namespace MLAlgorithmsTests
 			
 		}
 
+
+		private double[] ConvertIntArrayToDoubleArray(int[] array)
+		{
+			return array.Select(value => (double)value).ToArray();
+		}
+
+
+		private int[] ConvertDoubleArrayToIntArray(double[] array)
+		{
+			return array.Select(value => (int)value).ToArray();
+		}
 	}
 }
 

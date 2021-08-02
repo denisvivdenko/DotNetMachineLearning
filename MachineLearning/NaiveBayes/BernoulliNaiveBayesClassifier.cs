@@ -164,9 +164,6 @@ namespace DotNetML.NaiveBayes
 			count.Add(0, ((double)CountOccurances(labels, 0) + _kSmothingCoefficient) / ((double)labelsNumber + _kSmothingCoefficient * _alpha));
 			count.Add(1, ((double)CountOccurances(labels, 1) + _kSmothingCoefficient) / ((double)labelsNumber + _kSmothingCoefficient * _alpha));
 
-			Console.WriteLine(count[0]);
-			Console.WriteLine(count[1]);
-
 			return count;
 		}
 

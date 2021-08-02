@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DotNetML.ModelSelection
 {
@@ -16,18 +15,17 @@ namespace DotNetML.ModelSelection
 		}
 
 
-		public ((double[][], double[][]), (int[], int[])) SplitData(double[][] data, int[] target)
+		public ((double[][], double[][]), (double[], double[])) SplitData(double[][] data, double[] target)
 		{
 			CheckDatasetsCompatibility(data, target);
 
 			int testSampleSize = GetTestSampleSize(_testSize, data);
 			HashSet<int> testIndices = GenerateTestSampleIndices(testSampleSize, target.Length);
 
-
 			double[][] XTrain = data;
 			double[][] XTest = new double[testSampleSize][];
-			int[] yTrain = target;
-			int[] yTest = new int[testSampleSize];
+			double[] yTrain = target;
+			double[] yTest = new double[testSampleSize];
 
 			int lastIndex = 0;
 			foreach (int index in testIndices.OrderByDescending(v => v))
@@ -37,7 +35,7 @@ namespace DotNetML.ModelSelection
 				lastIndex++;
 
 				List<double[]> XTrainUpdated = new List<double[]>(XTrain);
-				List<int> yTrainUpdated = new List<int>(yTrain);
+				List<double> yTrainUpdated = new List<double>(yTrain);
 				XTrainUpdated.RemoveAt(index);
 				yTrainUpdated.RemoveAt(index);
 
@@ -64,7 +62,7 @@ namespace DotNetML.ModelSelection
 		}
 		
 
-		private bool CheckDatasetsCompatibility(double[][] data, int[] target)
+		private bool CheckDatasetsCompatibility(double[][] data, double[] target)
 		{
 			if (data.Length != target.Length)
 			{
