@@ -22,15 +22,17 @@ namespace ModelsTesting
             double[] predictions = regressor.PredictTargets(X);
 
             double rSquared = new RSquared(predictions, y).GetResult();
+            regressor.PrintParameters();
             Console.WriteLine($"RSquared: {rSquared}");
 
             // ================
 
-            var sgdRegressor = new GDSimpleLinearRegression(learningRate:0.001, stepSizeThreshold:0.0001);
+            var sgdRegressor = new GDSimpleLinearRegression(learningRate:0.0001, stepSizeThreshold:0.00001);
             sgdRegressor.TrainModel(X, y);
             double[] sgdPredictions = sgdRegressor.PredictTargets(X);
 
             double sgdRSquared = new RSquared(sgdPredictions, y).GetResult();
+            sgdRegressor.PrintParameters();
             Console.WriteLine($"RSquared: {sgdRSquared}");
         }
 

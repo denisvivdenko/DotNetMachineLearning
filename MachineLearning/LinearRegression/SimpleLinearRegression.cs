@@ -1,6 +1,7 @@
 using DotNetML.Statistics;
 using DotNetML.Metrics;
 using System.Collections.Generic;
+using System;
 
 namespace DotNetML.LinearRegression
 {
@@ -15,6 +16,11 @@ namespace DotNetML.LinearRegression
         private double _alpha;
         private bool _isTrained = false;   
 
+
+        public void PrintParameters()
+        {
+            Console.WriteLine($"Slope: {_beta} Interception: {_alpha}");
+        }
         
         public void TrainModel(double[] data, double[] target)
         {

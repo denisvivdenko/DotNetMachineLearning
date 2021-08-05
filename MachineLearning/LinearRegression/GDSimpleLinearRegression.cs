@@ -19,7 +19,7 @@ namespace DotNetML.LinearRegression
         
 
         public GDSimpleLinearRegression(double learningRate=0.01, 
-                double stepSizeThreshold=0.01, int maxEpohs=1000000)
+                double stepSizeThreshold=0.01, int maxEpohs=1000)
         {
             _learningRate = learningRate;
             _stepSizeThreshold = stepSizeThreshold;
@@ -60,29 +60,24 @@ namespace DotNetML.LinearRegression
         }
 
 
+        public void PrintParameters()
+        {
+            Console.WriteLine($"Slope: {_slope} Interception: {_intercept}");
+        }
+
+
         private (double slope, double intercept) FindBestParameters(double[] data, double[] target)
         {
-            int subsetLength = data.Length;
-
             (double slope, double intercept) parameters = (1, 0);
             for (int epoh=0; epoh < _maxEpohs; epoh++)
             {
-                (double slopeGradient, double interceptGradient) gradient = (0, 0);
-                for (int pointIndex=0; pointIndex < subsetLength; pointIndex++)
-                {
-                    (double dataPoint, double target) randomPoint = (data[pointIndex], target[pointIndex]);
-                    (double slopeGradient, double interceptGradient) nextGradient = ComputeGradientDescent(parameters.slope, 
-                                                                                                        parameters.intercept, randomPoint);
-
-                    gradient = CombineGradients(gradient, nextGradient);
-                }
-                
+                (double slopeGradient, double interceptGradient) gradient = ComputeGradientDescent(parameters, data, target);
                 (double slope, double intercept) newParameters = MakeStep(parameters, gradient);
 
                 Vector oldParametersVector = new Vector(new double[] { parameters.slope, parameters.intercept });
                 Vector newParametersVector = new Vector(new double[] { newParameters.slope, newParameters.intercept });
-
                 double stepSize = oldParametersVector.ComputeDistance(newParametersVector);
+
                 parameters = newParameters;
 
                 if (stepSize < _stepSizeThreshold)
@@ -92,6 +87,27 @@ namespace DotNetML.LinearRegression
             }
 
             return parameters;
+        }
+
+
+        private (double slopeGradient, double interceptGradient) ComputeGradientDescent((double slope, double intercept) parameters,
+                                                                                         double[] data, double[] target)
+        {
+            int subsetLength = data.Length;
+
+            (double slopeGradient, double interceptGradient) gradient = (0, 0);
+            for (int pointIndex=0; pointIndex < subsetLength; pointIndex++)
+            {
+                (double dataPoint, double target) currentPoint = (data[pointIndex], target[pointIndex]);
+
+                double slopeGradient = -2 * currentPoint.dataPoint * (currentPoint.target - (parameters.slope * currentPoint.dataPoint + parameters.intercept));
+                double interceptGradient = -2 * (currentPoint.target - (parameters.slope * currentPoint.dataPoint + parameters.intercept)); 
+                (double slopeGradient, double interceptGradient) nextGradient = (slopeGradient, interceptGradient);
+                
+                gradient = CombineGradients(gradient, nextGradient);
+            }
+
+            return gradient;
         }
 
 
@@ -110,30 +126,6 @@ namespace DotNetML.LinearRegression
             double newIntercept = parameters.intercept - gradient.interceptGradient * _learningRate;
 
             return (newSlope, newIntercept);
-        }
-
-
-        private (double slopeGradient, double interceptGradient) ComputeGradientDescent(double slope, double intercept, 
-                                                                                    (double dataPoint, double target) randomPoint)
-        {
-            double slopeGradient = -2 * randomPoint.dataPoint * (randomPoint.target - (slope * randomPoint.dataPoint + intercept));
-            double interceptGradient = -2 * (randomPoint.target - (slope * randomPoint.dataPoint + intercept)); 
-
-            return (slopeGradient, interceptGradient);
-        }
-
-        
-        private (double slope, double intercept) InitializeStartingParameters()
-        {
-            Random randomNumberGenerator = new Random(new System.DateTime().Millisecond);
-            return (randomNumberGenerator.Next(0, 15), randomNumberGenerator.Next(0, 10));
-        }
-
-
-        private int GetRandomRecordIndex(int subsetLength)
-        {
-            Random randomNumberGenerator = new Random(new System.DateTime().Millisecond);
-            return randomNumberGenerator.Next(0, subsetLength);
         }
     }
 }
