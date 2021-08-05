@@ -4,6 +4,7 @@ using System.IO;
 using DotNetML.LinearRegression;
 using DotNetML.ModelSelection;
 using DotNetML.Metrics;
+using System.Globalization;
 
 namespace ModelsTesting
 {
@@ -22,6 +23,15 @@ namespace ModelsTesting
 
             double rSquared = new RSquared(predictions, y).GetResult();
             Console.WriteLine($"RSquared: {rSquared}");
+
+            // ================
+
+            var sgdRegressor = new GDSimpleLinearRegression(learningRate:0.001, stepSizeThreshold:0.0001);
+            sgdRegressor.TrainModel(X, y);
+            double[] sgdPredictions = sgdRegressor.PredictTargets(X);
+
+            double sgdRSquared = new RSquared(sgdPredictions, y).GetResult();
+            Console.WriteLine($"RSquared: {sgdRSquared}");
         }
 
         public (double[], double[]) ReadCSV(string path) 
@@ -43,8 +53,8 @@ namespace ModelsTesting
                         continue;
                     }
 
-                    listA.Add((double)Int32.Parse(values[1]));
-                    listB.Add((double)Int32.Parse(values[2]));
+                    listA.Add((double)double.Parse(values[1], CultureInfo.InvariantCulture));
+                    listB.Add((double)double.Parse(values[2], CultureInfo.InvariantCulture));
                 }
             }
 
