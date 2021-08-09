@@ -25,7 +25,7 @@ namespace ModelsTesting
             regressor.PrintParameters();
             Console.WriteLine($"RSquared: {rSquared}");
 
-            // ================
+            // ===============
 
             var sgdRegressor = new GDSimpleLinearRegression(learningRate:0.0001, stepSizeThreshold:0.00001);
             sgdRegressor.TrainModel(X, y);

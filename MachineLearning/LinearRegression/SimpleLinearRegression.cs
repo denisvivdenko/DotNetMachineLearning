@@ -22,6 +22,7 @@ namespace DotNetML.LinearRegression
             Console.WriteLine($"Slope: {_beta} Interception: {_alpha}");
         }
         
+        
         public void TrainModel(double[] data, double[] target)
         {
             _beta = CalculateBeta(data, target);

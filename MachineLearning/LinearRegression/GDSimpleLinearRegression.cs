@@ -94,7 +94,6 @@ namespace DotNetML.LinearRegression
                                                                                          double[] data, double[] target)
         {
             int subsetLength = data.Length;
-
             (double slopeGradient, double interceptGradient) gradient = (0, 0);
             for (int pointIndex=0; pointIndex < subsetLength; pointIndex++)
             {
