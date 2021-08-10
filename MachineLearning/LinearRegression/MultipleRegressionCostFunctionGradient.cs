@@ -31,7 +31,7 @@ namespace DotNetML.LinearRegression
         
         private double[] ComputeGradient(double[] coefficients, double[][] data, double[] target)
         {
-            double[] gradient = new double[data.GetLength(1)];
+            double[] gradient = new double[coefficients.Length];
 
             int recordsNumber = data.GetLength(0);
             for (int coefficientIndex = 0; coefficientIndex < coefficients.Length; coefficientIndex++)

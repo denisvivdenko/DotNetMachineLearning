@@ -58,7 +58,7 @@ namespace DotNetML.LinearRegression
 
         private (double[] regressionCoefficients, double intercept) SearchBestParameters(double[][] data, double[] target)
         {
-            double[] startParameters = new double[data[0].Length];
+            double[] startParameters = new double[data[0].Length + 1];
             (double[][] data, double[] target) trainingData = (data, target);
             var costFunctionGradient = new MultipleRegressionCostFunctionGradient(trainingData, startParameters);
 

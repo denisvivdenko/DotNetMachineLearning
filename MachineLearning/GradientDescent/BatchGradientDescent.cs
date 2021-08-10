@@ -12,7 +12,7 @@ namespace DotNetML.GradientDescent
         private double _stepSizeThreshold;
         private double _learningRate;
 
-
+        // TO DO
         public BatchGradientDescent(MultipleRegressionCostFunctionGradient costFunctionGradient, double[] startParameters,
                                     double learningRate=0.01, double stepSizeThreshold=0.01, int maxEpohs=1000)
         {
