@@ -13,7 +13,7 @@ namespace DotNetML.GradientDescent
         private double _learningRate;
 
         // TO DO
-        public BatchGradientDescent(MultipleRegressionCostFunctionGradient costFunctionGradient, double[] startParameters,
+        public BatchGradientDescent(CostFunctionGradient costFunctionGradient, double[] startParameters,
                                     double learningRate=0.01, double stepSizeThreshold=0.01, int maxEpohs=1000)
         {
             _learningRate = learningRate;
@@ -29,7 +29,7 @@ namespace DotNetML.GradientDescent
         }
 
 
-        private double[] FindBestParameters(MultipleRegressionCostFunctionGradient costFunctionGradient, double[] startParameters)
+        private double[] FindBestParameters(CostFunctionGradient costFunctionGradient, double[] startParameters)
         {
             double[] currentParameters = startParameters;
             for (int epoh = 0; epoh < _maxEpohs; epoh++)

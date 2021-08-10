@@ -1,29 +1,22 @@
 using System.Linq;
+using DotNetML.GradientDescent;
 
 namespace DotNetML.LinearRegression
 {
-    public class MultipleRegressionCostFunctionGradient
+    public class MultipleRegressionCostFunctionGradient : CostFunctionGradient
     {
-        private double[] _gradient;
         private MultipleLinearRegression _regressor;
-        private (double[][] data, double[] target) _trainingData;
 
 
         public MultipleRegressionCostFunctionGradient((double[][] data, double[] target) trainingData, double[] coefficients)
+                                : base(trainingData, coefficients)
         {
             _regressor = new MultipleLinearRegression(coefficients);
-            _trainingData = trainingData;
             _gradient = ComputeGradient(coefficients, trainingData.data, trainingData.target);
         }
 
 
-        public double[] GetResult()
-        {
-            return _gradient;
-        }
-
-
-        public MultipleRegressionCostFunctionGradient SetNewParameters(double[] paramaters)
+        public override CostFunctionGradient SetNewParameters(double[] paramaters)
 		{
             return new MultipleRegressionCostFunctionGradient(_trainingData, paramaters);
 		}
