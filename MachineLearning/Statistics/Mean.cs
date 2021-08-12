@@ -5,15 +5,26 @@ namespace DotNetML.Statistics
         private double _mean;
 
         
+        public Mean() { }
+
+
         public Mean(double[] dataset)
         {
             _mean = CalculateMean(dataset);
         }
 
+
         public override double GetResult()
         {
             return _mean;
         }
+
+
+        public override Statistics SetData(double[] newData)
+        {
+            return new Mean(newData);
+        }
+
 
         private double CalculateMean(double[] dataset)
         {
