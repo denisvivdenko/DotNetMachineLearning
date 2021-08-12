@@ -5,13 +5,13 @@ namespace DotNetML.LinearRegression
 {
     public class MultipleRegressionCostFunctionGradient : CostFunctionGradient
     {
-        private MultipleLinearRegression _regressor;
+        private MultipleRegressionEquation _equation;
 
 
         public MultipleRegressionCostFunctionGradient((double[][] data, double[] target) trainingData, double[] coefficients)
                                 : base(trainingData, coefficients)
         {
-            _regressor = new MultipleLinearRegression(coefficients);
+            _equation = new MultipleRegressionEquation(coefficients);
             _gradient = ComputeGradient(coefficients, trainingData.data, trainingData.target);
         }
 
@@ -33,7 +33,7 @@ namespace DotNetML.LinearRegression
                 for (int recordIndex = 0; recordIndex < recordsNumber; recordIndex++)
                 {
                     double[] inputVector = data[recordIndex];
-                    double prediction = _regressor.PredictTarget(inputVector);
+                    double prediction = _equation.PredictTarget(inputVector);
                     double actual = target[recordIndex];
 
                     if (coefficientIndex == coefficients.Length - 1)

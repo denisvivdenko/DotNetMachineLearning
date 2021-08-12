@@ -1,21 +1,25 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DotNetML.LinearRegression
 {
-    public class MultipleLinearRegression
+    public class MultipleRegressionEquation
     {
         private double[] _regressionCoefficients;
         private double _intercept;          
 
 
-        public MultipleLinearRegression(double[] regressionCoefficients, double intercept)
+        public MultipleRegressionEquation() { }
+
+
+        public MultipleRegressionEquation(double[] regressionCoefficients, double intercept)
         {
             _regressionCoefficients = regressionCoefficients;
             _intercept = intercept;
         }
 
 
-        public MultipleLinearRegression(double[] coefficients)
+        public MultipleRegressionEquation(double[] coefficients)
         {
             _regressionCoefficients = coefficients.SkipLast(1).ToArray();
             _intercept = coefficients[coefficients.Length - 1];
@@ -26,6 +30,15 @@ namespace DotNetML.LinearRegression
         {
             return ComputeRegressionEquation(_regressionCoefficients, _intercept, inputVector);
         }
+
+
+        public double[] GetCoefficients()
+		{
+            List<double> regressionCoefficients = new List<double>(_regressionCoefficients);
+            regressionCoefficients.Add(_intercept);
+
+            return regressionCoefficients.ToArray();
+		}
 
 
         private double ComputeRegressionEquation(double[] regressionCoefficients, double intercept, double[] inputVector)

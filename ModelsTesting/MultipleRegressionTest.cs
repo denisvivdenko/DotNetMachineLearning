@@ -5,6 +5,7 @@ using DotNetML.LinearRegression;
 using DotNetML.ModelSelection;
 using DotNetML.Metrics;
 using System.Globalization;
+using DotNetML.Statistics;
 
 
 namespace ModelsTesting
@@ -24,6 +25,15 @@ namespace ModelsTesting
 
             var score = new RSquared(predictions, y);
             Console.WriteLine($"RSquared score: {score.GetResult()}");
+
+            var regressionStandardErrors = new RegressionStandardErrors(new TrainDataset(X, y));
+            double[] standardErrors = regressionStandardErrors.GetResult();
+            int coefIndex = 0;
+            foreach (double standardError in standardErrors)
+			{
+                Console.WriteLine($"SE {coefIndex}: {standardError}");
+                coefIndex++;
+			}
         }
 
         public (double[][], double[]) ReadCSV(string path) 

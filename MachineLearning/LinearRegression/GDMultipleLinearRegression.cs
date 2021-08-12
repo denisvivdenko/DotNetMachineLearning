@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace DotNetML.LinearRegression
 {
-    public class GDMultipleLinearRegression
+    public class GDMultipleLinearRegression : MultipleRegressionEquation
     {         
-        private MultipleLinearRegression _regressor;
+        private MultipleRegressionEquation _equation;
         private double _learningRate;
         private double _stepSizeThreshold;
         private int _maxEpohs;
@@ -27,19 +27,19 @@ namespace DotNetML.LinearRegression
         public void TrainModel(double[][] data, double[] target)
         {
             var parameters = SearchBestParameters(data, target);
-            _regressor = new MultipleLinearRegression(parameters.regressionCoefficients, parameters.intercept);
+            _equation = new MultipleRegressionEquation(parameters.regressionCoefficients, parameters.intercept);
             _isTrained = true;
         }
 
 
-        public double PredictTarget(double[] inputVector)
+        public new double PredictTarget(double[] inputVector)
         {
             if (!_isTrained)
             {
                 throw new System.Exception("model isn't trained");
             }
 
-            return _regressor.PredictTarget(inputVector);
+            return _equation.PredictTarget(inputVector);
         }
 
 
@@ -54,6 +54,12 @@ namespace DotNetML.LinearRegression
 
             return predictions.ToArray();
         }
+
+
+        public MultipleRegressionEquation GetEquation()
+		{
+            return _equation;
+		}
 
 
         private (double[] regressionCoefficients, double intercept) SearchBestParameters(double[][] data, double[] target)
