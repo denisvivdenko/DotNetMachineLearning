@@ -9,19 +9,19 @@ namespace DotNetML.Bootstrap
         private double[] _targetSample;
 
 
-        public Bootstrap(TrainDataset population, int sampleSize)
+        public Bootstrap(TrainingDataset population, int sampleSize)
         {
             (_dataSample, _targetSample) = SelectRandomSample(population, sampleSize);
         }
 
 
-        public TrainDataset GetResult()
+        public TrainingDataset GetResult()
         {
-            return new TrainDataset(_dataSample, _targetSample);
+            return new TrainingDataset(_dataSample, _targetSample);
         }
 
 
-        private (double[][] data, double[] target) SelectRandomSample(TrainDataset population, int sampleSize)
+        private (double[][] data, double[] target) SelectRandomSample(TrainingDataset population, int sampleSize)
         {
             double[][] dataSample = new double[sampleSize][];
             double[] targetSample = new double[sampleSize];

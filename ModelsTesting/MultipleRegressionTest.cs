@@ -18,20 +18,24 @@ namespace ModelsTesting
             string file = dir + "\\datasets\\multiple_regression_dataset.csv";
 
             var (X, y) = ReadCSV(file);
+            var trainingDataset = new TrainingDataset(X, y);
 
             var regressor = new GDMultipleLinearRegression(learningRate:0.0001);
-            regressor.TrainModel(X, y);
+            regressor.TrainModel(trainingDataset);
             var predictions = regressor.PredictTargets(X);
 
             var score = new RSquared(predictions, y);
             Console.WriteLine($"RSquared score: {score.GetResult()}");
 
-            var regressionStandardErrors = new RegressionStandardErrors(new TrainDataset(X, y));
+            double[] coefficients = regressor.GetCoefficients();
+
+            var regressionStandardErrors = new RegressionStandardErrors(new TrainingDataset(X, y));
             double[] standardErrors = regressionStandardErrors.GetResult();
             int coefIndex = 0;
             foreach (double standardError in standardErrors)
 			{
-                Console.WriteLine($"SE {coefIndex}: {standardError}");
+                Console.WriteLine($"{coefIndex} SE: {standardError}; Coef {coefficients[coefIndex]}");
+                Console.WriteLine($"t-stat: {coefficients[coefIndex] / standardError}");
                 coefIndex++;
 			}
         }

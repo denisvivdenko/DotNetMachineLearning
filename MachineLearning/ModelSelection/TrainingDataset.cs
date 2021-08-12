@@ -1,12 +1,12 @@
 namespace DotNetML.ModelSelection
 {
-    public class TrainDataset
+    public class TrainingDataset
     {
         public double[][] Data { get; set; }
         public double[] Target { get; set; }
         
 
-        public TrainDataset(double[][] data, double[] target)
+        public TrainingDataset(double[][] data, double[] target)
         {
             Data = data;
             Target = target;

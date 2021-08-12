@@ -1,5 +1,6 @@
 using System.Linq;
 using DotNetML.GradientDescent;
+using DotNetML.ModelSelection;
 
 namespace DotNetML.LinearRegression
 {
@@ -8,11 +9,11 @@ namespace DotNetML.LinearRegression
         private MultipleRegressionEquation _equation;
 
 
-        public MultipleRegressionCostFunctionGradient((double[][] data, double[] target) trainingData, double[] coefficients)
+        public MultipleRegressionCostFunctionGradient(TrainingDataset trainingData, double[] coefficients)
                                 : base(trainingData, coefficients)
         {
             _equation = new MultipleRegressionEquation(coefficients);
-            _gradient = ComputeGradient(coefficients, trainingData.data, trainingData.target);
+            _gradient = ComputeGradient(coefficients, trainingData);
         }
 
 
@@ -22,8 +23,11 @@ namespace DotNetML.LinearRegression
 		}
 
         
-        private double[] ComputeGradient(double[] coefficients, double[][] data, double[] target)
+        private double[] ComputeGradient(double[] coefficients, TrainingDataset trainingData)
         {
+            double[][] data = trainingData.Data;
+            double[] target = trainingData.Target;
+            
             double[] gradient = new double[coefficients.Length];
 
             int recordsNumber = data.GetLength(0);

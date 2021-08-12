@@ -1,5 +1,5 @@
 using DotNetML.GradientDescent;
-using System;
+using DotNetML.ModelSelection;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,9 +24,9 @@ namespace DotNetML.LinearRegression
         }
 
         
-        public void TrainModel(double[][] data, double[] target)
+        public void TrainModel(TrainingDataset trainingDataset)
         {
-            var parameters = SearchBestParameters(data, target);
+            var parameters = SearchBestParameters(trainingDataset);
             _equation = new MultipleRegressionEquation(parameters.regressionCoefficients, parameters.intercept);
             _isTrained = true;
         }
@@ -62,11 +62,17 @@ namespace DotNetML.LinearRegression
 		}
 
 
-        private (double[] regressionCoefficients, double intercept) SearchBestParameters(double[][] data, double[] target)
+        public new double[] GetCoefficients()
+		{
+            return _equation.GetCoefficients();
+		}
+
+
+        private (double[] regressionCoefficients, double intercept) SearchBestParameters(TrainingDataset trainingDataset)
         {
-            double[] startParameters = new double[data[0].Length + 1];
-            (double[][] data, double[] target) trainingData = (data, target);
-            var costFunctionGradient = new MultipleRegressionCostFunctionGradient(trainingData, startParameters);
+
+            double[] startParameters = new double[trainingDataset.Data[0].Length + 1];
+            var costFunctionGradient = new MultipleRegressionCostFunctionGradient(trainingDataset, startParameters);
 
             var gradientDescent = new BatchGradientDescent(costFunctionGradient, startParameters, learningRate:_learningRate, 
                                             stepSizeThreshold:_stepSizeThreshold, maxEpohs:_maxEpohs);

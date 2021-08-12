@@ -1,7 +1,5 @@
-using DotNetML.Bootstrap;
 using DotNetML.ModelSelection;
 using DotNetML.LinearRegression;
-using System.Linq;
 
 namespace DotNetML.Statistics
 {
@@ -10,7 +8,7 @@ namespace DotNetML.Statistics
         private double[] _standardErrors;
 
 
-        public RegressionStandardErrors(TrainDataset data)
+        public RegressionStandardErrors(TrainingDataset data)
         {
             int sampleSize = (int) (data.Target.Length * 0.3);
             int samplesNumber = (int)(data.Target.Length * 0.1);
@@ -25,17 +23,17 @@ namespace DotNetML.Statistics
 		}
 
 
-        private double[][] ComputeRegressionsCoefficients(TrainDataset data, int sampleSize, int sampleNumber)
+        private double[][] ComputeRegressionsCoefficients(TrainingDataset data, int sampleSize, int sampleNumber)
 		{
             double[][] samplesCoefficients = new double[data.Data[0].Length + 1][];
             
             for (int sampleCount = 0; sampleCount < sampleNumber; sampleCount++)
 			{
                 Bootstrap.Bootstrap bootstrap = new Bootstrap.Bootstrap(data, sampleSize);
-                TrainDataset sample = bootstrap.GetResult();
+                TrainingDataset sampleDataset = bootstrap.GetResult();
 
                 var regressor = new GDMultipleLinearRegression(learningRate: 0.0001);
-                regressor.TrainModel(sample.Data, sample.Target);
+                regressor.TrainModel(sampleDataset);
                 double[] coefficients = regressor.GetEquation().GetCoefficients();
 
                 for (int coefficientIndex = 0; coefficientIndex < coefficients.Length; coefficientIndex++)
