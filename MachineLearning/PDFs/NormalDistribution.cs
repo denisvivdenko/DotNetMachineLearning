@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DotNetML.PDFs
 {
-    public class NormalDistribution : IDistribution
+    public class NormalDistribution : Distribution
     {
         private double _mean;
         private double _sigma;
@@ -18,13 +18,22 @@ namespace DotNetML.PDFs
         }
 
 
-        public double[] GetResult()
+        public NormalDistribution(double value, double mean, double sigma)
+        {
+            _mean = mean;
+            _sigma = sigma;
+            double[] dataset = { value };
+            _probabilities = ComputeDensityFunction(dataset);
+        }
+
+
+        public override double[] GetResult()
         {
             return _probabilities;
         }
 
 
-        private double[] ComputeDensityFunction(double[] dataset)
+        protected override double[] ComputeDensityFunction(double[] dataset)
         {
             List<double> probabilities = new List<double>();
             foreach (double value in dataset)

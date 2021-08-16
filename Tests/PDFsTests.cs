@@ -8,12 +8,6 @@ namespace Tests
 {
 	public class PDFsTests
 	{
-		[SetUp]
-		public void Setup()
-		{
-				
-		}
-
         
         [Test]
 		public void NormalDistributionTest()
