@@ -1,6 +1,5 @@
 using System;
 
-
 namespace DotNetML.Statistics
 {
     public class StandardDeviation : Statistics

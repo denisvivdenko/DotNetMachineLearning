@@ -6,12 +6,15 @@ namespace DotNetML.Statistics
     public class RegressionStandardErrors
     {
         private double[] _standardErrors;
+        private double _learningRate = 0.0001;
+        private double _sampleSizeCoefficient = 0.3;
+        private double _samplesNumberCoefficient = 0.1;
 
 
         public RegressionStandardErrors(TrainingDataset data)
         {
-            int sampleSize = (int) (data.Target.Length * 0.3);
-            int samplesNumber = (int)(data.Target.Length * 0.1);
+            int sampleSize = (int) (data.Target.Length * _sampleSizeCoefficient);
+            int samplesNumber = (int)(data.Target.Length * _samplesNumberCoefficient);
             double[][] regressionsCoefficients = ComputeRegressionsCoefficients(data, sampleSize, samplesNumber);
             _standardErrors = ComputeStandardErrors(regressionsCoefficients);
         }
@@ -25,14 +28,14 @@ namespace DotNetML.Statistics
 
         private double[][] ComputeRegressionsCoefficients(TrainingDataset data, int sampleSize, int sampleNumber)
 		{
-            double[][] samplesCoefficients = new double[data.Data[0].Length + 1][];
-            
+            double[][] samplesCoefficients = new double[data.Data[0].Length + 1][];            
+
             for (int sampleCount = 0; sampleCount < sampleNumber; sampleCount++)
 			{
                 Bootstrap.Bootstrap bootstrap = new Bootstrap.Bootstrap(data, sampleSize);
                 TrainingDataset sampleDataset = bootstrap.GetResult();
 
-                var regressor = new GDMultipleLinearRegression(learningRate: 0.0001);
+                var regressor = new GDMultipleLinearRegression(learningRate: _learningRate);
                 regressor.TrainModel(sampleDataset);
                 double[] coefficients = regressor.GetEquation().GetCoefficients();
 
