@@ -5,13 +5,15 @@ namespace DotNetML.Statistics
     public class StandardDeviation : Statistics
     {
         private double _standardDeviation;
+        private double _freedomDegree;
 
 
         public StandardDeviation() { }
 
 
-        public StandardDeviation(double[] dataset)
+        public StandardDeviation(double[] dataset, int freedomDegree=1)
         {
+            _freedomDegree = freedomDegree;
             _standardDeviation = CalculateStandardDeviation(dataset);
         }
 
@@ -39,7 +41,7 @@ namespace DotNetML.Statistics
                 squaredDeviationsSum += Math.Pow((value - datasetMean), 2); 
             }
 
-            return Math.Sqrt(squaredDeviationsSum / (datasetLength-1));
+            return Math.Sqrt(squaredDeviationsSum / (datasetLength - _freedomDegree));
         }
     }
 }
