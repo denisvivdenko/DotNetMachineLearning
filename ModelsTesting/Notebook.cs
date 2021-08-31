@@ -8,7 +8,7 @@ namespace ModelsTesting
 	{
 		public static void Main(string[] args)
 		{
-			new MultipleRegressionTest();
+			new DecisionTreeTest();
 		}
 	}
 }
