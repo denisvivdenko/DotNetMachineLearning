@@ -57,6 +57,7 @@ namespace ModelsTesting
             Console.Write("]");
 		}
 
+
         private double[][] ReadCSV(string path) 
         {
             List<double[]> data = new List<double[]>();

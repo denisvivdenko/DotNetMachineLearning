@@ -5,6 +5,7 @@ namespace DotNetML.DecisionTree
     public class Node : TreeComponent
     {
         public List<TreeComponent> Values { get; private set; }
+        public double Entropy { get; set; }
         private int _featureIndex;
         private double _featureValue;
 

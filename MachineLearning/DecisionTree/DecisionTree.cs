@@ -56,6 +56,8 @@ namespace DotNetML.DecisionTree
                 selectedDataset = selectedDataset.DropFeature(bestSelectingFeatureIndex);
                 var newNode = new Node(ConstructDecisionTree(selectedDataset), featureIndex: bestSelectingFeatureIndex,
                                                                 featureValue: featureValue);
+
+                newNode.Entropy = new Entropy(selectedDataset.Target).GetResult();
                 nodes.Add(newNode);
 			}
 
@@ -77,16 +79,19 @@ namespace DotNetML.DecisionTree
                     continue;
                 }
 
+                double featureEntropy = 0;
                 foreach (double featureValue in disctinctValues)
                 {
                     var selectedDataset = dataset.SelectSubset(featureIndex, featureValue);
                     double selectedDatasetEntropy = new Entropy(selectedDataset.Target).GetResult();
-                    if (selectedDatasetEntropy < minEntropy)
-                    {
-                        minEntropy = selectedDatasetEntropy;
-                        bestFeatureIndex = featureIndex;
-                    }
+                    featureEntropy += selectedDatasetEntropy * (selectedDataset.RecordsCount / dataset.RecordsCount);
                 }
+
+                if (featureEntropy < minEntropy)
+				{
+                    minEntropy = featureEntropy;
+                    bestFeatureIndex = featureIndex;
+				}
             }
 
             return bestFeatureIndex;
