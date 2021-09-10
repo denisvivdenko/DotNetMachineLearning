@@ -32,7 +32,7 @@ namespace DotNetML.LinearRegression
         }
 
 
-        public override double PredictTarget(double[] inputVector)
+        public override double[] PredictTarget(double[] inputVector)
         {
             if (!_isTrained)
             {

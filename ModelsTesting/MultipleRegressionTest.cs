@@ -24,7 +24,7 @@ namespace ModelsTesting
             regressor.TrainModel(trainingDataset);
             var predictions = regressor.PredictTargets(X);
 
-            var score = new RSquared(predictions, y);
+            var score = new RSquared(predictions[0], y);
             Console.WriteLine($"RSquared score: {score.GetResult()}");
 
             double[] coefficients = regressor.GetCoefficients();

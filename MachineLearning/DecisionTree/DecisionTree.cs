@@ -8,22 +8,22 @@ namespace DotNetML.DecisionTree
 {
     public class DecisionTree : Model
     {
-        private TreeComponent _rootNode;
+        private Node _rootNode;
 
 
         public DecisionTree()
         {
-
         }
 
 
-        public override double PredictTarget(double[] inputVector)
+        public override double[] PredictTarget(double[] inputVector)
         {
-            throw new NotImplementedException();
+            var evaluator = new DecisionTreeEvaluator(_rootNode, inputVector);
+            return evaluator.GetResult();
         }
 
 
-        public override void TrainModel(TrainingDataset trainingDataset)
+		public override void TrainModel(TrainingDataset trainingDataset)
         {
 
             _rootNode = new Node(ConstructDecisionTree((TrainingDatasetCategoricalTarget) trainingDataset), 

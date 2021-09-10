@@ -37,16 +37,16 @@ namespace DotNetML.LinearRegression
                 for (int recordIndex = 0; recordIndex < recordsNumber; recordIndex++)
                 {
                     double[] inputVector = data[recordIndex];
-                    double prediction = _equation.PredictTarget(inputVector);
+                    double[] prediction = _equation.PredictTarget(inputVector);
                     double actual = target[recordIndex];
 
                     if (coefficientIndex == coefficients.Length - 1)
                     {
-                        coefficientGradient = (-2) * (actual - prediction);
+                        coefficientGradient = (-2) * (actual - prediction[0]);
                         break;
                     }
 
-                    coefficientGradient += (-2) * inputVector[coefficientIndex] * (actual - prediction); 
+                    coefficientGradient += (-2) * inputVector[coefficientIndex] * (actual - prediction[0]); 
                 }
                 gradient[coefficientIndex] = coefficientGradient; 
             }

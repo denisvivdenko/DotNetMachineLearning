@@ -8,12 +8,12 @@ namespace DotNetML
         public abstract void TrainModel(TrainingDataset trainingDataset);
 
 
-        public abstract double PredictTarget(double[] inputVector);
+        public abstract double[] PredictTarget(double[] inputVector);
 
 
-        public double[] PredictTargets(double[][] inputs)
+        public double[][] PredictTargets(double[][] inputs)
         {
-            List<double> predictions = new List<double>();
+            List<double[]> predictions = new List<double[]>();
             foreach (double[] input in inputs)
             {
                 var prediction = PredictTarget(input);

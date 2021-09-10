@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using DotNetML.DecisionTree;
 using DotNetML.ModelSelection;
 
@@ -20,10 +21,43 @@ namespace ModelsTesting
 
             var classifier = new DecisionTree();
             classifier.TrainModel(new TrainingDatasetCategoricalTarget(X, y));
+
+            int trueClassified = 0;
+            int falseClassified = 0;
+
+            for (int recordIndex = 0; recordIndex < X.Length; recordIndex++)
+			{
+                double[] prediction = classifier.PredictTarget(X[recordIndex]);
+                double[] actual = y[recordIndex];
+                
+                if (prediction.SequenceEqual(actual))
+				{
+                    trueClassified++;
+				}
+                falseClassified++;
+
+                Console.Write("PREDICTION: ");
+                PrintArray(prediction);
+                Console.Write(" ACTUAL: ");
+                PrintArray(actual);
+                Console.WriteLine();
+			}
+
+            Console.WriteLine($"TRUE: {trueClassified} FALSE: {falseClassified}. {trueClassified / (double)(trueClassified + falseClassified)}");
         }
 
 
-        public double[][] ReadCSV(string path) 
+        private void PrintArray(double[] array)
+		{
+            Console.Write("[");
+            foreach (double element in array)
+			{
+                Console.Write($" {element} ");
+			}
+            Console.Write("]");
+		}
+
+        private double[][] ReadCSV(string path) 
         {
             List<double[]> data = new List<double[]>();
             bool isHeader = true;

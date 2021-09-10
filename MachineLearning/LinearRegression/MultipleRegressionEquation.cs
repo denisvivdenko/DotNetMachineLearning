@@ -33,9 +33,9 @@ namespace DotNetML.LinearRegression
         }
 
 
-        public override double PredictTarget(double[] inputVector)
+        public override double[] PredictTarget(double[] inputVector)
         {
-            return ComputeRegressionEquation(_regressionCoefficients, _intercept, inputVector);
+            return new double[] { ComputeRegressionEquation(_regressionCoefficients, _intercept, inputVector) };
         }
 
 
