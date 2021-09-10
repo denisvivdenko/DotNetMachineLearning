@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using DotNetML.ModelSelection;
 
 namespace DotNetML.LinearRegression
 {
-    public class MultipleRegressionEquation
+    public class MultipleRegressionEquation : Model
     {
         private double[] _regressionCoefficients;
         private double _intercept;          
@@ -26,7 +27,13 @@ namespace DotNetML.LinearRegression
         }
 
 
-        public double PredictTarget(double[] inputVector)
+        public override void TrainModel(TrainingDataset trainingDataset)
+        {
+            throw new System.NotImplementedException();
+        }
+
+
+        public override double PredictTarget(double[] inputVector)
         {
             return ComputeRegressionEquation(_regressionCoefficients, _intercept, inputVector);
         }

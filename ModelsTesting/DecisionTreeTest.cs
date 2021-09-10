@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using DotNetML.DecisionTree;
+using DotNetML.ModelSelection;
 
 namespace ModelsTesting
 {
@@ -15,6 +17,9 @@ namespace ModelsTesting
 
             double[][] X = ReadCSV(file);   
             double[][] y = ReadCSV(file2);
+
+            var classifier = new DecisionTree();
+            classifier.TrainModel(new TrainingDatasetCategoricalTarget(X, y));
         }
 
 

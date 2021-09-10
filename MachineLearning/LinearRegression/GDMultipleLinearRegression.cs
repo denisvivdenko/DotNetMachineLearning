@@ -24,7 +24,7 @@ namespace DotNetML.LinearRegression
         }
 
         
-        public void TrainModel(TrainingDataset trainingDataset)
+        public override void TrainModel(TrainingDataset trainingDataset)
         {
             var parameters = SearchBestParameters(trainingDataset);
             _equation = new MultipleRegressionEquation(parameters.regressionCoefficients, parameters.intercept);
@@ -32,7 +32,7 @@ namespace DotNetML.LinearRegression
         }
 
 
-        public new double PredictTarget(double[] inputVector)
+        public override double PredictTarget(double[] inputVector)
         {
             if (!_isTrained)
             {
@@ -40,19 +40,6 @@ namespace DotNetML.LinearRegression
             }
 
             return _equation.PredictTarget(inputVector);
-        }
-
-
-        public double[] PredictTargets(double[][] inputs)
-        {
-            List<double> predictions = new List<double>();
-            foreach (double[] input in inputs)
-            {
-                var prediction = PredictTarget(input);
-                predictions.Add(prediction);
-            }
-
-            return predictions.ToArray();
         }
 
 
